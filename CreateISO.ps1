@@ -4,7 +4,7 @@ Add-Type -AssemblyName System.Windows.Forms
 # Create new form
 $ISOConverter                    = New-Object system.Windows.Forms.Form
 # Define the size, title and background color
-$ISOConverter.ClientSize         = '500,300'
+$ISOConverter.ClientSize         = '350,200'
 $ISOConverter.text               = "Folder to ISO"
 $ISOConverter.BackColor          = "#ededed"
 $ISOConverter.FormBorderStyle    = 'FixedDialog'
@@ -17,7 +17,7 @@ $FolderSelectBtn.BackColor         = "#03b1fc"
 $FolderSelectBtn.text              = "Select Folder"
 $FolderSelectBtn.width             = 120
 $FolderSelectBtn.height            = 50
-$FolderSelectBtn.location          = New-Object System.Drawing.Point(50,50)
+$FolderSelectBtn.location          = New-Object System.Drawing.Point(25,25)
 $FolderSelectBtn.Font              = 'Microsoft Sans Serif,10'
 $FolderSelectBtn.ForeColor         = "#000000"
 $FolderSelectBtn.Visible           = $true
@@ -28,7 +28,7 @@ $CreateIsoBtn.BackColor         = "#03b1fc"
 $CreateIsoBtn.text              = "Create"
 $CreateIsoBtn.width             = 120
 $CreateIsoBtn.height            = 50
-$CreateIsoBtn.location          = New-Object System.Drawing.Point(200,50)
+$CreateIsoBtn.location          = New-Object System.Drawing.Point(25,100)
 $CreateIsoBtn.Font              = 'Microsoft Sans Serif,10'
 $CreateIsoBtn.ForeColor         = "#000000"
 $CreateIsoBtn.Visible           = $true

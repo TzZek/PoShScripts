@@ -7,6 +7,9 @@ $ISOConverter                    = New-Object system.Windows.Forms.Form
 $ISOConverter.ClientSize         = '500,300'
 $ISOConverter.text               = "Folder to ISO"
 $ISOConverter.BackColor          = "#ededed"
+$ISOConverter.FormBorderStyle    = 'FixedDialog'
+$ISOConverter.MaximizeBox        = $false
+$ISOConverter.startposition    = "centerscreen"
 
 # Display the button to select a folder
 $FolderSelectBtn                   = New-Object system.Windows.Forms.Button

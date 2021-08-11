@@ -19,7 +19,18 @@ $FolderSelectBtn.Font              = 'Microsoft Sans Serif,10'
 $FolderSelectBtn.ForeColor         = "#000000"
 $FolderSelectBtn.Visible           = $true
 
-$ISOConverter.controls.AddRange(@($FolderSelectBtn))
+# Button to Create ISO
+$CreateIsoBtn                   = New-Object system.Windows.Forms.Button
+$CreateIsoBtn.BackColor         = "#03b1fc"
+$CreateIsoBtn.text              = "Create"
+$CreateIsoBtn.width             = 120
+$CreateIsoBtn.height            = 50
+$CreateIsoBtn.location          = New-Object System.Drawing.Point(50,200)
+$CreateIsoBtn.Font              = 'Microsoft Sans Serif,10'
+$CreateIsoBtn.ForeColor         = "#000000"
+$CreateIsoBtn.Visible           = $true
+
+$ISOConverter.controls.AddRange(@($FolderSelectBtn, $CreateIsoBtn))
 
 
 $FolderSelectBtn.Add_Click({ SelectFolder })

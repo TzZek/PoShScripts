@@ -53,18 +53,6 @@ Function SelectFolder($initialDirectory) {
 
 $CreateIsoBtn.Add_Click({ Run-Script })
 
-
-function Run-Script()
-{  
- New-IsoFile $UserSelectedPath
- [System.Windows.MessageBox]::Show('ISO created. You can find it here: ' + $env:USERPROFILE + "`r`nClick OK to Open the Containing Folder")
- explorer.exe $env:USERPROFILE
-}  
-
-# Display the form
-[void]$ISOConverter.ShowDialog()
-
-# Function to create the ISO File
 function New-IsoFile 
 {  
     
@@ -102,7 +90,7 @@ public class ISOFile
 }  
 '@  
     } 
-   
+   71887
     if ($BootFile) { 
       if('BDR','BDRE' -contains $Media) { Write-Warning "Bootable image doesn't seem to work with media type $Media" } 
       ($Stream = New-Object -ComObject ADODB.Stream -Property @{Type=1}).Open()  # adFileTypeBinary 
@@ -144,3 +132,15 @@ public class ISOFile
     $Target
   } 
 }  
+
+function Run-Script()
+{  
+ New-IsoFile $UserSelectedPath
+ Write-Host("Opening Containing Folder") -ForegroundColor Yellow
+ explorer.exe $env:USERPROFILE
+}  
+
+# Display the form
+[void]$ISOConverter.ShowDialog()
+
+# Function to create the ISO File

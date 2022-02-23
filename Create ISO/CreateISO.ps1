@@ -14,6 +14,13 @@ $ISOConverter.FormBorderStyle    = 'FixedDialog'
 $ISOConverter.MaximizeBox        = $false
 $ISOConverter.startposition    = "centerscreen"
 
+$objLabel = New-Object System.Windows.Forms.label
+$objLabel.Location = New-Object System.Drawing.Size(7,10)
+$objLabel.Size = New-Object System.Drawing.Size(300,50)
+$objLabel.BackColor = "Transparent"
+$objLabel.ForeColor = "white"
+$objLabel.Text = "Instructions: Press Select Folder, Select the Folder Containing the Files to be added to the .iso and Press OK, Press the CREATE Button. ISO File will be generated and placed in the Users Home Directory"
+
 # Display the button to select a folder
 $FolderSelectBtn                   = New-Object system.Windows.Forms.Button
 $FolderSelectBtn.BackColor         = "#171717"
@@ -21,7 +28,7 @@ $FolderSelectBtn.text              = "Select Folder"
 $FolderSelectBtn.ForeColor         = '#f2f2f2'
 $FolderSelectBtn.width             = 240
 $FolderSelectBtn.height            = 50
-$FolderSelectBtn.location          = New-Object System.Drawing.Point(25,25)
+$FolderSelectBtn.location          = New-Object System.Drawing.Point(25,70)
 $FolderSelectBtn.Font              = 'Microsoft Sans Serif,10'
 $FolderSelectBtn.ForeColor         = "#f2f2f2"
 $FolderSelectBtn.Visible           = $true
@@ -32,12 +39,12 @@ $CreateIsoBtn.BackColor         = "#171717"
 $CreateIsoBtn.text              = "CREATE"
 $CreateIsoBtn.width             = 240
 $CreateIsoBtn.height            = 50
-$CreateIsoBtn.location          = New-Object System.Drawing.Point(25,100)
+$CreateIsoBtn.location          = New-Object System.Drawing.Point(25,130)
 $CreateIsoBtn.Font              = 'Microsoft Sans Serif,10'
 $CreateIsoBtn.ForeColor         = "#f2f2f2"
 $CreateIsoBtn.Visible           = $true
-
-$ISOConverter.controls.AddRange(@($FolderSelectBtn, $CreateIsoBtn))
+$CreateIsoBtn.Enabled           = $false
+$ISOConverter.controls.AddRange(@($objLabel, $FolderSelectBtn, $CreateIsoBtn))
 
 
 $FolderSelectBtn.Add_Click({ SelectFolder }) 
@@ -48,11 +55,18 @@ Function SelectFolder($initialDirectory) {
     $browser = New-Object System.Windows.Forms.FolderBrowserDialog
     $null = $browser.ShowDialog()
     $global:UserSelectedPath = $browser.SelectedPath
-    write-host("You selected the Path: "+ $UserSelectedPath)
+    if ($UserSelectedPath -eq "")
+    {
+        Write-Host("Please Press Create, Select a Path and hit OK") -ForegroundColor Red}
+    else {
+        write-host("You selected the Path: "+ $UserSelectedPath) -ForegroundColor Yellow
+        $CreateISOBtn.Enabled = $true
+    }
 }
 
 $CreateIsoBtn.Add_Click({ Run-Script })
 
+# Function to create the ISO File
 function New-IsoFile 
 {  
     
@@ -138,9 +152,9 @@ function Run-Script()
  New-IsoFile $UserSelectedPath
  Write-Host("Opening Containing Folder") -ForegroundColor Yellow
  explorer.exe $env:USERPROFILE
+ 
+ Write-Host("Job Done") -ForegroundColor Green
 }  
 
 # Display the form
 [void]$ISOConverter.ShowDialog()
-
-# Function to create the ISO File

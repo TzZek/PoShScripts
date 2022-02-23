@@ -1,5 +1,3 @@
-# Credits:
-
 #New-IsoFile AUTHOR: Chris Wu LASTEDIT: 03/23/2016 14:46:50
 # GUI Designed by Derek Kirby - 2/17/2022 
 
@@ -9,33 +7,34 @@ Add-Type -AssemblyName System.Windows.Forms
 # Create new form
 $ISOConverter                    = New-Object system.Windows.Forms.Form
 # Define the size, title and background color
-$ISOConverter.ClientSize         = '350,200'
+$ISOConverter.ClientSize         = '300,200'
 $ISOConverter.text               = "Folder to ISO"
-$ISOConverter.BackColor          = "#ededed"
+$ISOConverter.BackColor          = "#0f0f0f"
 $ISOConverter.FormBorderStyle    = 'FixedDialog'
 $ISOConverter.MaximizeBox        = $false
 $ISOConverter.startposition    = "centerscreen"
 
 # Display the button to select a folder
 $FolderSelectBtn                   = New-Object system.Windows.Forms.Button
-$FolderSelectBtn.BackColor         = "#03b1fc"
+$FolderSelectBtn.BackColor         = "#171717"
 $FolderSelectBtn.text              = "Select Folder"
-$FolderSelectBtn.width             = 120
+$FolderSelectBtn.ForeColor         = '#f2f2f2'
+$FolderSelectBtn.width             = 240
 $FolderSelectBtn.height            = 50
 $FolderSelectBtn.location          = New-Object System.Drawing.Point(25,25)
 $FolderSelectBtn.Font              = 'Microsoft Sans Serif,10'
-$FolderSelectBtn.ForeColor         = "#000000"
+$FolderSelectBtn.ForeColor         = "#f2f2f2"
 $FolderSelectBtn.Visible           = $true
 
 # Button to Create ISO
 $CreateIsoBtn                   = New-Object system.Windows.Forms.Button
-$CreateIsoBtn.BackColor         = "#03b1fc"
-$CreateIsoBtn.text              = "Create"
-$CreateIsoBtn.width             = 120
+$CreateIsoBtn.BackColor         = "#171717"
+$CreateIsoBtn.text              = "CREATE"
+$CreateIsoBtn.width             = 240
 $CreateIsoBtn.height            = 50
 $CreateIsoBtn.location          = New-Object System.Drawing.Point(25,100)
 $CreateIsoBtn.Font              = 'Microsoft Sans Serif,10'
-$CreateIsoBtn.ForeColor         = "#000000"
+$CreateIsoBtn.ForeColor         = "#f2f2f2"
 $CreateIsoBtn.Visible           = $true
 
 $ISOConverter.controls.AddRange(@($FolderSelectBtn, $CreateIsoBtn))
@@ -58,7 +57,8 @@ $CreateIsoBtn.Add_Click({ Run-Script })
 function Run-Script()
 {  
  New-IsoFile $UserSelectedPath
- Write-Host($UserSelectedPath)
+ [System.Windows.MessageBox]::Show('ISO created. You can find it here: ' + $env:USERPROFILE + ' Click Ok to Open the Containing Folder')
+ explorer.exe $env:USERPROFILE
 }  
 
 # Display the form

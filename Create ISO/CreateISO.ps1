@@ -57,7 +57,7 @@ $CreateIsoBtn.Add_Click({ Run-Script })
 function Run-Script()
 {  
  New-IsoFile $UserSelectedPath
- [System.Windows.MessageBox]::Show('ISO created. You can find it here: ' + $env:USERPROFILE + ' Click Ok to Open the Containing Folder')
+ [System.Windows.MessageBox]::Show('ISO created. You can find it here: ' + $env:USERPROFILE + "`r`nClick OK to Open the Containing Folder")
  explorer.exe $env:USERPROFILE
 }  
 

@@ -42,24 +42,35 @@ $ISOConverter.controls.AddRange(@($FolderSelectBtn, $CreateIsoBtn))
 
 
 $FolderSelectBtn.Add_Click({ SelectFolder }) 
+
 # required functions
 Function SelectFolder($initialDirectory) {
     Add-Type -AssemblyName System.Windows.Forms
     $browser = New-Object System.Windows.Forms.FolderBrowserDialog
     $null = $browser.ShowDialog()
-    $UserSelectedPath = $browser.SelectedPath
+    $global:UserSelectedPath = $browser.SelectedPath
     write-host("You selected the Path: "+ $UserSelectedPath)
 }
 
-$CreateIsoBtn.Add_Click({ New-IsoFile })
+$CreateIsoBtn.Add_Click({ Run-Script })
 
 
+function Run-Script()
+{  
+ New-IsoFile $UserSelectedPath
+ Write-Host($UserSelectedPath)
+}  
+
+# Display the form
+[void]$ISOConverter.ShowDialog()
+
+# Function to create the ISO File
 function New-IsoFile 
 {  
-
+    
   [CmdletBinding(DefaultParameterSetName='Source')]Param( 
     [parameter(Position=1,Mandatory=$true,ValueFromPipeline=$true, ParameterSetName='Source')]$Source,  
-    [parameter(Position=2)][string]$Path = "$env:C:\Users\dk\Desktop\ISOs\$((Get-Date).ToString('yyyyMMdd-HHmmss.ffff')).iso",  
+    [parameter(Position=2)][string]$Path = "$env:USERPROFILE\$((Get-Date).ToString('yyyyMMdd-HHmmss.ffff')).iso",  
     [ValidateScript({Test-Path -LiteralPath $_ -PathType Leaf})][string]$BootFile = $null, 
     [ValidateSet('CDR','CDRW','DVDRAM','DVDPLUSR','DVDPLUSRW','DVDPLUSR_DUALLAYER','DVDDASHR','DVDDASHRW','DVDDASHR_DUALLAYER','DISK','DVDPLUSRW_DUALLAYER','BDR','BDRE')][string] $Media = 'DVDPLUSRW_DUALLAYER', 
     [string]$Title = (Get-Date).ToString("yyyyMMdd-HHmmss.ffff"),  
@@ -133,6 +144,3 @@ public class ISOFile
     $Target
   } 
 }  
-
-# Display the form
-[void]$ISOConverter.ShowDialog()

@@ -1,0 +1,5 @@
+In this example, the script reads the contents of the text file "IPAddresses.txt" and assigns it to the $ips variable. It then uses the Ceiling method of the [Math] class to calculate the number of IP addresses that should be in each file.
+
+The script then uses a foreach loop to iterate through the IP addresses, creating chunks of the specified size and outputting each chunk to a separate text file named "IPAddresses_1.txt" to "IPAddresses_n.txt" where n is the number of files specified. The script will create the files in the folder where the script is located
+
+Note: This script assumes that the IP addresses are listed one per line in the IPAddresses.txt file and that the number of files specified is less or equal than the number of IP addresses in the file.

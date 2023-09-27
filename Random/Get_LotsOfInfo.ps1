@@ -5,14 +5,18 @@ $outputFile = "C:\path\to\your\output.csv"
 $hostname = hostname
 
 # Get the IP address
-$ipAddress = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -ne 'Loopback Pseudo-Interface 1' }).IPAddress
+$ipAddress = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -ne 'Loopback Pseudo-Interface 1' -and $_.IPAddress -ne '127.0.0.1' }).IPAddress
 
-# Get the matching MAC address for the given IP address
+# Initialize MAC address variable
 $macAddress = $null
+
+# Loop through each IP address to find the corresponding MAC address
 foreach ($ip in $ipAddress) {
-    $neighbor = Get-NetNeighbor -IPAddress $ip -AddressFamily IPv4 | Where-Object { $_.State -eq 'Reachable' }
-    if ($null -ne $neighbor) {
-        $macAddress += $neighbor.LinkLayerAddress
+    $interfaceIndex = (Get-NetIPAddress -IPAddress $ip).InterfaceIndex
+    $mac = (Get-NetAdapter -InterfaceIndex $interfaceIndex).MacAddress
+    if ($null -ne $mac) {
+        $macAddress = $mac
+        break
     }
 }
 
@@ -26,7 +30,7 @@ $osVersion = (Get-WmiObject win32_operatingsystem).Version
 $computerInfo = [PSCustomObject]@{
     Hostname     = $hostname
     IPAddress    = $ipAddress -join ', '
-    MACAddress   = $macAddress -join ', '
+    MACAddress   = $macAddress
     SerialNumber = $serialNumber
     OSVersion    = $osVersion
 }

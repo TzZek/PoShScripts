@@ -32,14 +32,22 @@ $button.Add_Click({
     $printers | ForEach-Object {
         $listBoxPrinters.Items.Add($_.Name)
     }
+    $printerCountLabel.Text = "Number of Printers: " + $listBoxPrinters.Items.Count
 })
 $form.Controls.Add($button)
 
 # Listbox to display printers
 $listBoxPrinters = New-Object System.Windows.Forms.ListBox
 $listBoxPrinters.Location = New-Object System.Drawing.Point(10,80)
-$listBoxPrinters.Size = New-Object System.Drawing.Size(360,280)
+$listBoxPrinters.Size = New-Object System.Drawing.Size(360,240)
 $form.Controls.Add($listBoxPrinters)
+
+# Label to display count of printers
+$printerCountLabel = New-Object System.Windows.Forms.Label
+$printerCountLabel.Location = New-Object System.Drawing.Point(10,330)
+$printerCountLabel.Size = New-Object System.Drawing.Size(360,20)
+$printerCountLabel.Text = "Number of Printers: 0"
+$form.Controls.Add($printerCountLabel)
 
 # Show the form
 $form.ShowDialog()

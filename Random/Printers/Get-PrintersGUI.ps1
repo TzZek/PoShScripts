@@ -4,9 +4,24 @@ Add-Type -AssemblyName System.Drawing
 
 # Create the main form
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "Printers on Server"
-$form.Size = New-Object System.Drawing.Size(1000,400)
+$form.Text = "Printer Management"
+$form.Size = New-Object System.Drawing.Size(1100,500)
 $form.StartPosition = "CenterScreen"
+
+# Create TabControl and TabPages
+$tabControl = New-Object System.Windows.Forms.TabControl
+$tabControl.Dock = [System.Windows.Forms.DockStyle]::Fill
+
+$tabPrinters = New-Object System.Windows.Forms.TabPage
+$tabPrinters.Text = "List Printers"
+
+$tabManage = New-Object System.Windows.Forms.TabPage
+$tabManage.Text = "Manage Printers"
+
+$tabControl.Controls.Add($tabPrinters)
+$tabControl.Controls.Add($tabManage)
+
+$form.Controls.Add($tabControl)
 
 # Label for entering server name
 $label = New-Object System.Windows.Forms.Label
@@ -70,6 +85,48 @@ $printerCountLabel.Location = New-Object System.Drawing.Point(10,330)
 $printerCountLabel.Size = New-Object System.Drawing.Size(360,20)
 $printerCountLabel.Text = "Number of Printers: 0"
 $form.Controls.Add($printerCountLabel)
+
+# Components for Adding/Removing Printers (on $tabManage)
+# ... [Place components related to managing printers here, and add them to $tabManage]
+
+# For demonstration, I'll add simple components for the "Manage Printers" tab
+$addPrinterLabel = New-Object System.Windows.Forms.Label
+$addPrinterLabel.Location = New-Object System.Drawing.Point(10,20)
+$addPrinterLabel.Size = New-Object System.Drawing.Size(150,20)
+$addPrinterLabel.Text = "Printer Name to Add:"
+$tabManage.Controls.Add($addPrinterLabel)
+
+$addPrinterTextBox = New-Object System.Windows.Forms.TextBox
+$addPrinterTextBox.Location = New-Object System.Drawing.Point(170,20)
+$tabManage.Controls.Add($addPrinterTextBox)
+
+$addPrinterButton = New-Object System.Windows.Forms.Button
+$addPrinterButton.Location = New-Object System.Drawing.Point(340,20)
+$addPrinterButton.Text = "Add Printer"
+$addPrinterButton.Add_Click({
+    # Logic to add printer (for demonstration, it's just a message box)
+    [System.Windows.Forms.MessageBox]::Show("Functionality to add '$($addPrinterTextBox.Text)' not implemented in this demo.")
+})
+$tabManage.Controls.Add($addPrinterButton)
+
+$removePrinterLabel = New-Object System.Windows.Forms.Label
+$removePrinterLabel.Location = New-Object System.Drawing.Point(10,60)
+$removePrinterLabel.Size = New-Object System.Drawing.Size(150,20)
+$removePrinterLabel.Text = "Printer Name to Remove:"
+$tabManage.Controls.Add($removePrinterLabel)
+
+$removePrinterTextBox = New-Object System.Windows.Forms.TextBox
+$removePrinterTextBox.Location = New-Object System.Drawing.Point(170,60)
+$tabManage.Controls.Add($removePrinterTextBox)
+
+$removePrinterButton = New-Object System.Windows.Forms.Button
+$removePrinterButton.Location = New-Object System.Drawing.Point(340,60)
+$removePrinterButton.Text = "Remove Printer"
+$removePrinterButton.Add_Click({
+    # Logic to remove printer (for demonstration, it's just a message box)
+    [System.Windows.Forms.MessageBox]::Show("Functionality to remove '$($removePrinterTextBox.Text)' not implemented in this demo.")
+})
+$tabManage.Controls.Add($removePrinterButton)
 
 # Show the form
 $form.ShowDialog()

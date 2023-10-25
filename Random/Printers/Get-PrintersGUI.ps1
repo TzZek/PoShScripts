@@ -96,8 +96,13 @@ $addPrinterButton = New-Object System.Windows.Forms.Button
 $addPrinterButton.Location = New-Object System.Drawing.Point(340,20)
 $addPrinterButton.Text = "Add Printer"
 $addPrinterButton.Add_Click({
-    # Logic to add printer (for demonstration, it's just a message box)
-    [System.Windows.Forms.MessageBox]::Show("Functionality to add '$($addPrinterTextBox.Text)' not implemented in this demo.")
+    try {
+        # Add the printer (assuming a default port and driver for simplicity)
+        Add-Printer -Name $addPrinterTextBox.Text -DriverName "Generic / Text Only" -PortName "PORTPROMPT:"
+        [System.Windows.Forms.MessageBox]::Show("Printer '$($addPrinterTextBox.Text)' added successfully.")
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show("Error adding printer: $($_.Exception.Message)")
+    }
 })
 $tabManage.Controls.Add($addPrinterButton)
 
@@ -115,8 +120,13 @@ $removePrinterButton = New-Object System.Windows.Forms.Button
 $removePrinterButton.Location = New-Object System.Drawing.Point(340,60)
 $removePrinterButton.Text = "Remove Printer"
 $removePrinterButton.Add_Click({
-    # Logic to remove printer (for demonstration, it's just a message box)
-    [System.Windows.Forms.MessageBox]::Show("Functionality to remove '$($removePrinterTextBox.Text)' not implemented in this demo.")
+    try {
+        # Remove the printer
+        Remove-Printer -Name $removePrinterTextBox.Text
+        [System.Windows.Forms.MessageBox]::Show("Printer '$($removePrinterTextBox.Text)' removed successfully.")
+    } catch {
+        [System.Windows.Forms.MessageBox]::Show("Error removing printer: $($_.Exception.Message)")
+    }
 })
 $tabManage.Controls.Add($removePrinterButton)
 

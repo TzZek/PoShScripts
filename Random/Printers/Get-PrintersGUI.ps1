@@ -27,20 +27,23 @@ $button.Location = New-Object System.Drawing.Point(10,40)
 $button.Size = New-Object System.Drawing.Size(100,30)
 $button.Text = "Get Printers"
 $button.Add_Click({
-    $listBoxPrinters.Items.Clear()
+    $dataGridViewPrinters.Rows.Clear()
     $printers = Get-Printer -ComputerName $textBoxServer.Text
     $printers | ForEach-Object {
-        $listBoxPrinters.Items.Add($_.Name)
+        $dataGridViewPrinters.Rows.Add($_.Name)
     }
-    $printerCountLabel.Text = "Number of Printers: " + $listBoxPrinters.Items.Count
+    $printerCountLabel.Text = "Number of Printers: " + $dataGridViewPrinters.Rows.Count
 })
 $form.Controls.Add($button)
 
-# Listbox to display printers
-$listBoxPrinters = New-Object System.Windows.Forms.ListBox
-$listBoxPrinters.Location = New-Object System.Drawing.Point(10,80)
-$listBoxPrinters.Size = New-Object System.Drawing.Size(360,240)
-$form.Controls.Add($listBoxPrinters)
+# DataGridView to display printers
+$dataGridViewPrinters = New-Object System.Windows.Forms.DataGridView
+$dataGridViewPrinters.Location = New-Object System.Drawing.Point(10,80)
+$dataGridViewPrinters.Size = New-Object System.Drawing.Size(360,240)
+$dataGridViewPrinters.ColumnCount = 1
+$dataGridViewPrinters.Columns[0].Name = "Printer Name"
+$dataGridViewPrinters.RowHeadersVisible = $false
+$form.Controls.Add($dataGridViewPrinters)
 
 # Label to display count of printers
 $printerCountLabel = New-Object System.Windows.Forms.Label

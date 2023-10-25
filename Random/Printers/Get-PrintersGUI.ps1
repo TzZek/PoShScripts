@@ -8,21 +8,6 @@ $form.Text = "Printer Management"
 $form.Size = New-Object System.Drawing.Size(1100,500)
 $form.StartPosition = "CenterScreen"
 
-# Create TabControl and TabPages
-$tabControl = New-Object System.Windows.Forms.TabControl
-$tabControl.Dock = [System.Windows.Forms.DockStyle]::Fill
-
-$tabPrinters = New-Object System.Windows.Forms.TabPage
-$tabPrinters.Text = "List Printers"
-
-$tabManage = New-Object System.Windows.Forms.TabPage
-$tabManage.Text = "Manage Printers"
-
-$tabControl.Controls.Add($tabPrinters)
-$tabControl.Controls.Add($tabManage)
-
-$form.Controls.Add($tabControl)
-
 # Label for entering server name
 $label = New-Object System.Windows.Forms.Label
 $label.Location = New-Object System.Drawing.Point(10,10)
@@ -44,15 +29,33 @@ $button.Text = "Get Printers"
 $button.Add_Click({
     $dataGridViewPrinters.Rows.Clear()
     $printers = Get-Printer -ComputerName $textBoxServer.Text
-    $count = 0
-    $printers | ForEach-Object {
-        $count++
+
+    $printerData = $printers | ForEach-Object -Parallel {
+        $printer = $_
         $online = "No"
         # Check if printer is reachable
-        if (Test-Connection -ComputerName $_.PrinterName -Count 1 -Quiet) {
+        if (Test-Connection -ComputerName $printer.PrinterName -Count 1 -Quiet) {
             $online = "Yes"
         }
-        $dataGridViewPrinters.Rows.Add($count, $_.Name, $_.DriverName, $_.PortName, $_.Location, $_.Shared, $_.ShareName, $_.Comment, $_.PrinterStatus, $online, $_.JobCount, $_.Default)
+        return @{
+            Name        = $printer.Name
+            DriverName  = $printer.DriverName
+            PortName    = $printer.PortName
+            Location    = $printer.Location
+            Shared      = $printer.Shared
+            ShareName   = $printer.ShareName
+            Comment     = $printer.Comment
+            PrinterStatus = $printer.PrinterStatus
+            Online      = $online
+            JobCount    = $printer.JobCount
+            Default     = $printer.Default
+        }
+    }
+
+    $count = 0
+    $printerData | ForEach-Object {
+        $count++
+        $dataGridViewPrinters.Rows.Add($count, $_.Name, $_.DriverName, $_.PortName, $_.Location, $_.Shared, $_.ShareName, $_.Comment, $_.PrinterStatus, $_.Online, $_.JobCount, $_.Default)
     }
     $printerCountLabel.Text = "Number of Printers: " + $count
 })

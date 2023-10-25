@@ -32,12 +32,7 @@ $button.Add_Click({
     $count = 0
     $printers | ForEach-Object {
         $count++
-        $online = "No"
-        # Check if printer is reachable
-        if (Test-Connection -ComputerName $_.PrinterName -Count 1 -Quiet) {
-            $online = "Yes"
-        }
-        $dataGridViewPrinters.Rows.Add($count, $_.Name, $_.DriverName, $_.PortName, $_.Location, $_.Shared, $_.ShareName, $_.Comment, $_.PrinterStatus, $online, $_.JobCount, $_.Default)
+        $dataGridViewPrinters.Rows.Add($count, $_.Name, $_.DriverName, $_.PortName, $_.Location, $_.Shared, $_.ShareName, $_.Comment, $_.PrinterStatus, $_.JobCount, $_.Default)
     }
     $printerCountLabel.Text = "Number of Printers: " + $count
 })
@@ -47,7 +42,7 @@ $form.Controls.Add($button)
 $dataGridViewPrinters = New-Object System.Windows.Forms.DataGridView
 $dataGridViewPrinters.Location = New-Object System.Drawing.Point(10,80)
 $dataGridViewPrinters.Size = New-Object System.Drawing.Size(970,240)
-$dataGridViewPrinters.ColumnCount = 12
+$dataGridViewPrinters.ColumnCount = 11
 $dataGridViewPrinters.Columns[0].Name = "Count"
 $dataGridViewPrinters.Columns[1].Name = "Name"
 $dataGridViewPrinters.Columns[2].Name = "Driver"
@@ -57,7 +52,6 @@ $dataGridViewPrinters.Columns[5].Name = "Shared"
 $dataGridViewPrinters.Columns[6].Name = "Share Name"
 $dataGridViewPrinters.Columns[7].Name = "Comment"
 $dataGridViewPrinters.Columns[8].Name = "Status"
-$dataGridViewPrinters.Columns[9].Name = "Online"
 $dataGridViewPrinters.Columns[10].Name = "Job Count"
 $dataGridViewPrinters.Columns[11].Name = "Default"
 $dataGridViewPrinters.AutoSizeColumnsMode = "Fill"

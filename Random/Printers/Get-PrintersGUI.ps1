@@ -5,7 +5,7 @@ Add-Type -AssemblyName System.Drawing
 # Create the main form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Printers on Server"
-$form.Size = New-Object System.Drawing.Size(800,400)
+$form.Size = New-Object System.Drawing.Size(900,400)
 $form.StartPosition = "CenterScreen"
 
 # Label for entering server name
@@ -29,28 +29,31 @@ $button.Text = "Get Printers"
 $button.Add_Click({
     $dataGridViewPrinters.Rows.Clear()
     $printers = Get-Printer -ComputerName $textBoxServer.Text
+    $count = 0
     $printers | ForEach-Object {
-        $dataGridViewPrinters.Rows.Add($_.Name, $_.DriverName, $_.PortName, $_.Location, $_.Shared, $_.ShareName, $_.Comment, $_.PrinterStatus, $_.JobCount, $_.Default)
+        $count++
+        $dataGridViewPrinters.Rows.Add($count, $_.Name, $_.DriverName, $_.PortName, $_.Location, $_.Shared, $_.ShareName, $_.Comment, $_.PrinterStatus, $_.JobCount, $_.Default)
     }
-    $printerCountLabel.Text = "Number of Printers: " + $dataGridViewPrinters.Rows.Count
+    $printerCountLabel.Text = "Number of Printers: " + $count
 })
 $form.Controls.Add($button)
 
 # DataGridView to display printers
 $dataGridViewPrinters = New-Object System.Windows.Forms.DataGridView
 $dataGridViewPrinters.Location = New-Object System.Drawing.Point(10,80)
-$dataGridViewPrinters.Size = New-Object System.Drawing.Size(770,240)
-$dataGridViewPrinters.ColumnCount = 10
-$dataGridViewPrinters.Columns[0].Name = "Name"
-$dataGridViewPrinters.Columns[1].Name = "Driver"
-$dataGridViewPrinters.Columns[2].Name = "Port"
-$dataGridViewPrinters.Columns[3].Name = "Location"
-$dataGridViewPrinters.Columns[4].Name = "Shared"
-$dataGridViewPrinters.Columns[5].Name = "Share Name"
-$dataGridViewPrinters.Columns[6].Name = "Comment"
-$dataGridViewPrinters.Columns[7].Name = "Status"
-$dataGridViewPrinters.Columns[8].Name = "Job Count"
-$dataGridViewPrinters.Columns[9].Name = "Default"
+$dataGridViewPrinters.Size = New-Object System.Drawing.Size(870,240)
+$dataGridViewPrinters.ColumnCount = 11
+$dataGridViewPrinters.Columns[0].Name = "Count"
+$dataGridViewPrinters.Columns[1].Name = "Name"
+$dataGridViewPrinters.Columns[2].Name = "Driver"
+$dataGridViewPrinters.Columns[3].Name = "Port"
+$dataGridViewPrinters.Columns[4].Name = "Location"
+$dataGridViewPrinters.Columns[5].Name = "Shared"
+$dataGridViewPrinters.Columns[6].Name = "Share Name"
+$dataGridViewPrinters.Columns[7].Name = "Comment"
+$dataGridViewPrinters.Columns[8].Name = "Status"
+$dataGridViewPrinters.Columns[9].Name = "Job Count"
+$dataGridViewPrinters.Columns[10].Name = "Default"
 $dataGridViewPrinters.AutoSizeColumnsMode = "Fill"
 $dataGridViewPrinters.RowHeadersVisible = $false
 $form.Controls.Add($dataGridViewPrinters)

@@ -1,3 +1,13 @@
+# Add necessary .NET assemblies
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+
+# Create the main form
+$form = New-Object System.Windows.Forms.Form
+$form.Text = "Printer Management"
+$form.Size = New-Object System.Drawing.Size(1100,500)
+$form.StartPosition = "CenterScreen"
+
 # Create TabControl and TabPages
 $tabControl = New-Object System.Windows.Forms.TabControl
 $tabControl.Dock = [System.Windows.Forms.DockStyle]::Fill

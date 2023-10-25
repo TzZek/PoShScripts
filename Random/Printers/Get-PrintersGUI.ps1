@@ -21,7 +21,7 @@ $tabManage.Text = "Manage Printers"
 $tabControl.Controls.Add($tabPrinters)
 $tabControl.Controls.Add($tabManage)
 
-$tabPrinters.Controls.Add($tabControl)
+$form.Controls.Add($tabControl)
 
 # Label for entering server name
 $label = New-Object System.Windows.Forms.Label

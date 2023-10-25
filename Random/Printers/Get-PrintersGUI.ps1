@@ -52,8 +52,8 @@ $dataGridViewPrinters.Columns[5].Name = "Shared"
 $dataGridViewPrinters.Columns[6].Name = "Share Name"
 $dataGridViewPrinters.Columns[7].Name = "Comment"
 $dataGridViewPrinters.Columns[8].Name = "Status"
-$dataGridViewPrinters.Columns[10].Name = "Job Count"
-$dataGridViewPrinters.Columns[11].Name = "Default"
+$dataGridViewPrinters.Columns[9].Name = "Job Count"
+$dataGridViewPrinters.Columns[10].Name = "Default"
 $dataGridViewPrinters.AutoSizeColumnsMode = "Fill"
 $dataGridViewPrinters.RowHeadersVisible = $false
 $form.Controls.Add($dataGridViewPrinters)

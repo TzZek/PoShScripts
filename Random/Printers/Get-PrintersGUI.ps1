@@ -32,7 +32,11 @@ $button.Add_Click({
     $count = 0
     $printers | ForEach-Object {
         $count++
-        $online = if ($_.PrinterStatus -eq "Idle" -or $_.PrinterStatus -eq "Printing") { "Yes" } else { "No" }
+        $online = "No"
+        # Check if printer is reachable
+        if (Test-Connection -ComputerName $_.PrinterName -Count 1 -Quiet) {
+            $online = "Yes"
+        }
         $dataGridViewPrinters.Rows.Add($count, $_.Name, $_.DriverName, $_.PortName, $_.Location, $_.Shared, $_.ShareName, $_.Comment, $_.PrinterStatus, $online, $_.JobCount, $_.Default)
     }
     $printerCountLabel.Text = "Number of Printers: " + $count

@@ -13,7 +13,7 @@ function Get-FileHashCustom {
 }
 
 # Variable to hold the selected file path
-$path = $null
+$script:path = $null
 
 # Create the form
 $form = New-Object System.Windows.Forms.Form
@@ -74,8 +74,8 @@ $form.Add_DragEnter({
 $form.Add_DragDrop({
     $files = $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)
     if ($files.Length -eq 1) {
-        $path = $files[0]
-        $fileNameLabel.Text = "Selected file: " + [System.IO.Path]::GetFileName($path)
+        $script:path = $files[0]
+        $fileNameLabel.Text = "Selected file: " + [System.IO.Path]::GetFileName($script:path)
     } else {
         $resultLabel.Text = 'Please drop only one file.'
     }
@@ -83,7 +83,7 @@ $form.Add_DragDrop({
 
 # Function to handle the button click
 $button.Add_Click({
-    if (!$path) {
+    if (!$script:path) {
         $resultLabel.Text = 'No file has been selected.'
         return
     }
@@ -94,7 +94,7 @@ $button.Add_Click({
     }
     
     $algorithm = $comboBox.SelectedItem
-    $computedHash = Get-FileHashCustom -filePath $path -algorithm $algorithm
+    $computedHash = Get-FileHashCustom -filePath $script:path -algorithm $algorithm
     if ($inputHash -eq $computedHash) {
         $resultLabel.Text = 'Hash match successful.'
     } else {

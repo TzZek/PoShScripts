@@ -34,6 +34,13 @@ $comboBox.Items.AddRange(@("MD5", "SHA1", "SHA256", "SHA512"))
 $comboBox.SelectedIndex = 0
 $form.Controls.Add($comboBox)
 
+# Label for File Name
+$fileNameLabel = New-Object System.Windows.Forms.Label
+$fileNameLabel.Location = New-Object System.Drawing.Point(10,70)
+$fileNameLabel.Size = New-Object System.Drawing.Size(460,20)
+$fileNameLabel.Text = 'No file selected'
+$form.Controls.Add($fileNameLabel)
+
 # TextBox for Hash Input
 $textBox = New-Object System.Windows.Forms.TextBox
 $textBox.Location = New-Object System.Drawing.Point(10,100)
@@ -65,6 +72,7 @@ $form.Add_DragDrop({
     $files = $_.Data.GetData([Windows.Forms.DataFormats]::FileDrop)
     if ($files.Length -eq 1) {
         $path = $files[0]
+        $fileNameLabel.Text = "Selected file: " + [System.IO.Path]::GetFileName($path)
         $algorithm = $comboBox.SelectedItem
         $hash = Get-FileHashCustom -filePath $path -algorithm $algorithm
         $textBox.Text = $hash
@@ -73,6 +81,10 @@ $form.Add_DragDrop({
 
 # Function to handle the button click
 $button.Add_Click({
+    if (!$path) {
+        $resultLabel.Text = 'No file has been selected.'
+        return
+    }
     $inputHash = $textBox.Text.ToUpper()
     if (!$inputHash) {
         $resultLabel.Text = 'Please input a hash value.'

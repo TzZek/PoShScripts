@@ -24,8 +24,8 @@ $form.StartPosition = 'CenterScreen'
 # Label for instructions
 $label = New-Object System.Windows.Forms.Label
 $label.Location = New-Object System.Drawing.Point(10,10)
-$label.Size = New-Object System.Drawing.Size(460,20)
-$label.Text = 'Drag and drop a file onto this window, then enter and check the hash.'
+$label.Size = New-Object System.Drawing.Size(480,20)
+$label.Text = 'Drag and drop a file onto this window, then enter the hash you want to check.'
 $form.Controls.Add($label)
 
 # ComboBox for Hash Algorithm Selection
@@ -40,7 +40,7 @@ $form.Controls.Add($comboBox)
 # Label for File Name
 $fileNameLabel = New-Object System.Windows.Forms.Label
 $fileNameLabel.Location = New-Object System.Drawing.Point(10,70)
-$fileNameLabel.Size = New-Object System.Drawing.Size(460,20)
+$fileNameLabel.Size = New-Object System.Drawing.Size(480,20)
 $fileNameLabel.Text = 'No file selected'
 $form.Controls.Add($fileNameLabel)
 
@@ -60,7 +60,7 @@ $form.Controls.Add($button)
 # Label for Result
 $resultLabel = New-Object System.Windows.Forms.Label
 $resultLabel.Location = New-Object System.Drawing.Point(10,130)
-$resultLabel.Size = New-Object System.Drawing.Size(460,20)
+$resultLabel.Size = New-Object System.Drawing.Size(480,20)
 $form.Controls.Add($resultLabel)
 
 # Function to handle file drop
@@ -76,9 +76,8 @@ $form.Add_DragDrop({
     if ($files.Length -eq 1) {
         $path = $files[0]
         $fileNameLabel.Text = "Selected file: " + [System.IO.Path]::GetFileName($path)
-        $algorithm = $comboBox.SelectedItem
-        $hash = Get-FileHashCustom -filePath $path -algorithm $algorithm
-        $textBox.Text = $hash
+    } else {
+        $resultLabel.Text = 'Please drop only one file.'
     }
 })
 

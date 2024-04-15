@@ -12,6 +12,9 @@ function Get-FileHashCustom {
     return $hash
 }
 
+# Variable to hold the selected file path
+$path = $null
+
 # Create the form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = 'Drag and Drop File with Hash Check'

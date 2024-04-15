@@ -12,7 +12,7 @@ function Get-FileHashCustom {
     return $hash
 }
 
-# Variable to hold the selected file path
+# Ensure $script:path is declared at the top to have script-wide scope
 $script:path = $null
 
 # Create the form

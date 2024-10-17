@@ -1,24 +1,38 @@
-# Path to the Chrome Preferences file
-$preferencesPath = "$env:LOCALAPPDATA\Google\Chrome\User Data\Default\Preferences"
+# Function to update Chrome preferences for a given user
+function Update-ChromeStartupURLs {
+    param (
+        [string]$userProfile
+    )
 
-# Load the JSON content of the Preferences file
-$json = Get-Content $preferencesPath -Raw | ConvertFrom-Json
+    # Path to the Chrome Preferences file for the current user
+    $preferencesPath = "$userProfile\AppData\Local\Google\Chrome\User Data\Default\Preferences"
 
-# Set Chrome to open specific pages on startup (change startup preference)
-$json.browser.on_startup = 4  # 4 means open specific pages
+    # Check if Preferences file exists
+    if (Test-Path $preferencesPath) {
+        # Read the Preferences file content
+        $preferencesContent = Get-Content $preferencesPath -Raw | ConvertFrom-Json
 
-# Add the desired page to startup URLs
-$startupUrl = "chrome://settings/help"
+        # Ensure the session section exists
+        if (-not $preferencesContent.session) {
+            $preferencesContent.session = @{}
+        }
 
-# Check if startup URLs already exists, otherwise create an empty array
-if (-not $json.session.startup_urls) {
-    $json.session.startup_urls = @()
+        # Set the startup URLs to the desired value (note: chrome:// URLs will not work)
+        $preferencesContent.session.startup_urls = @("https://www.example.com") # Replace with a valid URL
+
+        # Convert the JSON back and save the updated content
+        $preferencesContent | ConvertTo-Json -Compress | Set-Content $preferencesPath
+
+        Write-Host "Updated Chrome Preferences for user profile: $userProfile"
+    } else {
+        Write-Host "Chrome Preferences file not found for user profile: $userProfile"
+    }
 }
 
-# Add the chrome://settings/help page if it doesn't exist
-if (-not ($json.session.startup_urls -contains $startupUrl)) {
-    $json.session.startup_urls += $startupUrl
-}
+# Get all user profiles on the system
+$userProfiles = Get-ChildItem "C:\Users" | Where-Object { Test-Path "$($_.FullName)\AppData\Local\Google\Chrome\User Data\Default\Preferences" }
 
-# Save the updated JSON back to the Preferences file
-$json | ConvertTo-Json -Compress | Set-Content $preferencesPath
+# Loop through each user profile and update the Chrome Preferences
+foreach ($profile in $userProfiles) {
+    Update-ChromeStartupURLs -userProfile $profile.FullName
+}

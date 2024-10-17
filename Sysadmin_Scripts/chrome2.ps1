@@ -6,8 +6,8 @@ function Update-ChromeStartupURLs {
     # Path to the Chrome Preferences file for the current user
     $preferencesPath = "$userProfile\AppData\Local\Google\Chrome\User Data\Default\Preferences"
 
-    # The URL we want to add (Note: chrome:// URLs will not work, replace this with an HTTP/HTTPS URL)
-    $newStartupUrl = "chrome://settings/onStartup" # Replace with a valid URL you want to add
+    # The URL we want to add
+    $newStartupUrl = "chrome://settings/onStartup"
 
     # Check if Preferences file exists
     if (Test-Path $preferencesPath) {
@@ -26,6 +26,7 @@ function Update-ChromeStartupURLs {
 
         # Check if the URL is already in the list, and add it if not present
         if (-not ($preferencesContent.session.startup_urls -contains $newStartupUrl)) {
+            # Add the new URL to the startup_urls array
             $preferencesContent.session.startup_urls += $newStartupUrl
             Write-Host "Added new URL to startup pages: $newStartupUrl"
         } else {

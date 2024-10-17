@@ -12,7 +12,7 @@ $hostnames | ForEach-Object -Parallel {
     # Try to run the commands on the remote computer.
     try {
         # Use Invoke-Command to run the command on the remote computer.
-        Invoke-Command -ComputerName $hostname -ScriptBlock {
+        Invoke-Command -ComputerName $hostname -ScriptBlck {
             # Run gpupdate and force it.
             Invoke-Expression "gpupdate /force"
 

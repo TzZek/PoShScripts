@@ -26,15 +26,21 @@ function Update-ChromeStartupURLs {
 
         # Check if the URL is already in the list, and add it if not present
         if (-not ($preferencesContent.session.startup_urls -contains $newStartupUrl)) {
-            # Add the URL as a string to the startup_urls array
-            $preferencesContent.session.startup_urls += [string]$newStartupUrl
+            # Add the URL explicitly as a string
+            $preferencesContent.session.startup_urls += @([string]$newStartupUrl)
             Write-Host "Added new URL to startup pages: $newStartupUrl"
         } else {
             Write-Host "The URL is already present in the startup pages."
         }
 
-        # Convert the JSON back and save the updated content with increased depth for serialization
-        $preferencesContent | ConvertTo-Json -Compress -Depth 10 | Set-Content $preferencesPath
+        # Convert the JSON back and save the updated content with proper formatting
+        $jsonContent = $preferencesContent | ConvertTo-Json -Compress -Depth 10
+
+        # Ensure the text formatting is correct, including double-quotes around the URL
+        $jsonContent = $jsonContent -replace '"chrome://settings/onStartup"', '"chrome://settings/onStartup"'
+
+        # Save the updated content back to the Preferences file
+        Set-Content -Path $preferencesPath -Value $jsonContent
 
         Write-Host "Updated Chrome Preferences for the current user."
     } else {

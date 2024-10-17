@@ -19,8 +19,8 @@ function Update-ChromeStartupURLs {
         # Set the startup URLs to the desired value (replace with a valid URL)
         $preferencesContent.session.startup_urls = @("https://www.example.com") # Replace with your desired URL
 
-        # Convert the JSON back and save the updated content
-        $preferencesContent | ConvertTo-Json -Compress | Set-Content $preferencesPath
+        # Convert the JSON back and save the updated content with increased depth for serialization
+        $preferencesContent | ConvertTo-Json -Compress -Depth 10 | Set-Content $preferencesPath
 
         Write-Host "Updated Chrome Preferences for the current user."
     } else {

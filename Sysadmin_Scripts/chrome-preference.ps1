@@ -1,5 +1,10 @@
 # Function to update Chrome startup URLs and set restore_on_startup for the current user
 function Update-ChromeStartupURLs {
+    # Stop Chrome if it is running
+    Get-Process | Where-Object { $_.Name -eq 'chrome' } | Stop-Process -Force
+
+    Write-Host "Stopped all running Chrome processes."
+
     # Get the current user's profile path
     $userProfile = [System.Environment]::GetFolderPath('UserProfile')
 
@@ -33,8 +38,20 @@ function Update-ChromeStartupURLs {
             Write-Host "The URL is already present in the startup pages."
         }
 
-        # Set restore_on_startup to 4 (to open specific pages on startup)
-        $preferencesContent.browser.restore_on_startup = 4
+        # Ensure the browser section exists, if not create it
+        if (-not $preferencesContent.PSObject.Properties["browser"]) {
+            # If browser section doesn't exist, create it and set restore_on_startup to 4
+            $preferencesContent | Add-Member -MemberType NoteProperty -Name "browser" -Value @{ restore_on_startup = 4 }
+            Write-Host "Created 'browser' section and set restore_on_startup to 4."
+        } else {
+            # If browser.restore_on_startup exists and is not already 4, set it to 4
+            if ($preferencesContent.browser.restore_on_startup -ne 4) {
+                $preferencesContent.browser.restore_on_startup = 4
+                Write-Host "Set restore_on_startup to 4."
+            } else {
+                Write-Host "restore_on_startup is already set to 4."
+            }
+        }
 
         # Convert the JSON back and save the updated content with proper formatting
         $jsonContent = $preferencesContent | ConvertTo-Json -Compress -Depth 10
@@ -45,7 +62,7 @@ function Update-ChromeStartupURLs {
         # Save the updated content back to the Preferences file
         Set-Content -Path $preferencesPath -Value $jsonContent
 
-        Write-Host "Updated Chrome Preferences for the current user and set restore_on_startup to 4."
+        Write-Host "Updated Chrome Preferences for the current user, and ensured restore_on_startup is 4."
     } else {
         Write-Host "Chrome Preferences file not found for the current user."
     }

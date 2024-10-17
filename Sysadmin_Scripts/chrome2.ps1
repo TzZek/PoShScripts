@@ -6,6 +6,9 @@ function Update-ChromeStartupURLs {
     # Path to the Chrome Preferences file for the current user
     $preferencesPath = "$userProfile\AppData\Local\Google\Chrome\User Data\Default\Preferences"
 
+    # The URL we want to add
+    $newStartupUrl = "https://www.example.com" # Replace with your desired URL
+
     # Check if Preferences file exists
     if (Test-Path $preferencesPath) {
         # Read the Preferences file content
@@ -16,8 +19,18 @@ function Update-ChromeStartupURLs {
             $preferencesContent.session = @{}
         }
 
-        # Set the startup URLs to the desired value (replace with a valid URL)
-        $preferencesContent.session.startup_urls = @("https://www.example.com") # Replace with your desired URL
+        # Ensure the startup_urls array exists
+        if (-not $preferencesContent.session.startup_urls) {
+            $preferencesContent.session.startup_urls = @()
+        }
+
+        # Check if the URL is already in the list, and add it if not present
+        if (-not ($preferencesContent.session.startup_urls -contains $newStartupUrl)) {
+            $preferencesContent.session.startup_urls += $newStartupUrl
+            Write-Host "Added new URL to startup pages: $newStartupUrl"
+        } else {
+            Write-Host "The URL is already present in the startup pages."
+        }
 
         # Convert the JSON back and save the updated content with increased depth for serialization
         $preferencesContent | ConvertTo-Json -Compress -Depth 10 | Set-Content $preferencesPath
